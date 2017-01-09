@@ -18,10 +18,9 @@ header("Content-Type: application/json; charset=utf-8");
 
 
 $api = new Vagas();
-$api->qryString = filter_input(INPUT_SERVER,'QUERY_STRING');
+$api->qryString(filter_input(INPUT_SERVER,'QUERY_STRING'));
 //$api->busca($this->qryString());
-http_response_code(200);
-exit($api->busca($api->qryString));
+exit($api->busca($this->qryString()));
 
 /**
  * Classe Vagas para a api de busca em json
@@ -52,7 +51,6 @@ class Vagas {
         $this->method = filter_input(INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING );
         //$this->url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         $this->method = filter_input(INPUT_SERVER, 'HTTP_HOST') . filter_input(INPUT_SERVER, 'REQUEST_URI');
-        $this->setArquivoJson("vagas.json");
     }
     
     
@@ -96,7 +94,7 @@ class Vagas {
      * Troca arquivo json, padrao e vagas.json
      */
     public function setArquivoJson($arq = "vagas.json") {
-        $this->nomeArq = $arq;
+        $this->nomeArq($arq);
     }
     
     /**
@@ -168,18 +166,15 @@ class Vagas {
             else return;
         }
         parse_str($queryStr);
-        $texto = filter_input(INPUT_GET, 'texto', FILTER_SANITIZE_SPECIAL_CHARS);
-        $cidade = filter_input(INPUT_GET, 'cidade', FILTER_SANITIZE_SPECIAL_CHARS);
-        $salOrd = filter_input(INPUT_GET, 'salOrd', FILTER_SANITIZE_SPECIAL_CHARS);
 
         //limpa as entradas e as coloca em minusculas
-        $texto = strtolower($this->test_str_input($texto));
-        $cidade = strtolower($this->test_str_input($cidade));
-        $salOrd = strtolower($this->test_str_input($salOrd));//opcional
+        $texto = strtolower(test_str_input($texto));
+        $cidade = strtolower(test_str_input($cidade));
+        $salOrd = strtolower(test_str_input($salOrd));//opcional
 
         //remove acentuacao para facilitar/melhorar resultado da busca
-        $texto = $this->tirarAcentos($texto);
-        $cidade = $this->tirarAcentos($cidade);
+        $texto = tirarAcentos($texto);
+        $cidade = tirarAcentos($cidade);
         $salOrd = strtolower($salOrd);
         
         //verificar se salOrd está na query e se é asc ou desc
@@ -188,10 +183,6 @@ class Vagas {
             return false;
         }
         
-        if (!file_exists($this->nomeArq)) {
-            http_response_code(412);//Arquivo de vagas.json nao encontrado.
-            return;
-        }
         $entrada = file_get_contents($this->nomeArq);
         $jsonIn = json_decode($entrada, true);
         $saida = array();
