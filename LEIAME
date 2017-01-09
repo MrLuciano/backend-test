@@ -2,4 +2,5 @@ Solução para o teste:
 
     - Api simples, sem framework. Para executar, acessar o caminho http://localhost/api.php?texto=texto&cidade=cidade&salOrd=asc|desc
     - Pode-se pesquisar por texto (nos campos title ou description) e ordenar o resultado, caso haja.
-    
+    - testes via browser executado com a extensão Postman do Chrome
+    - testes unitarios em contrução
